@@ -1,9 +1,7 @@
 import {
-
     IsNotEmpty,
     IsMobilePhone,
     IsString,
-    IsDate,
     MinLength,
     MaxLength,
     IsEmail,
