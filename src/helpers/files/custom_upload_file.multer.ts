@@ -73,7 +73,7 @@ const fileFilter = (
     callback,
 ) => {
     if (type == EnumFileType.IMAGE || file.mimetype.startsWith('image/')) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|PNG|JPG|JPEG|GIF|gif)$/)) {
             return callback(
                 new NotAcceptableException('Only image files are allowed!'),
                 false,
@@ -81,7 +81,7 @@ const fileFilter = (
         }
         return callback(null, true)
     } else if (type == EnumFileType.VIDEO || file.mimetype.startsWith('video/')) {
-        if (!file.originalname.match(/\.(mp4|avi|flv|3gp)$/)) {
+        if (!file.originalname.match(/\.(mp4|avi|flv|3gp|MP4|AVI|FLV|3GP)$/)) {
             return callback(
                 new NotAcceptableException('Only video files are allowed!'),
                 false,
@@ -89,7 +89,7 @@ const fileFilter = (
         }
         return callback(null, true)
     } else if (type == EnumFileType.AUDIO || file.mimetype.startsWith('audio/')) {
-        if (!file.originalname.match(/\.(mp3|wav)$/)) {
+        if (!file.originalname.match(/\.(mp3|wav|MP3|WAV)$/)) {
             return callback(
                 new NotAcceptableException('Only audio files are allowed!'),
                 false,
@@ -97,7 +97,7 @@ const fileFilter = (
         }
         return callback(null, true)
     } else if (type == EnumFileType.TEXT || file.mimetype.startsWith('text/')) {
-        if (!file.originalname.match(/\.(txt|doc|docx)$/)) {
+        if (!file.originalname.match(/\.(txt|doc|docx|TXT|DOC|DOCX)$/)) {
             return callback(
                 new NotAcceptableException('Only text files are allowed!'),
                 false,
@@ -105,7 +105,7 @@ const fileFilter = (
         }
         return callback(null, true)
     } else if (type == EnumFileType.PDF || file.mimetype == 'application/pdf') {
-        if (!file.originalname.match(/\.(pdf)$/)) {
+        if (!file.originalname.match(/\.(pdf|PDF)$/)) {
             return callback(
                 new NotAcceptableException('Only PDF files are allowed!'),
                 false,

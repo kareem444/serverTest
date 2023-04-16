@@ -17,7 +17,7 @@ import { ContactsModule } from './contacts/contacts.module';
     ProductsModule,
     PaymentsModule,
     OrdersModule,
-    ContactsModule
+    ContactsModule,
   ],
 })
 export class AppModule { }

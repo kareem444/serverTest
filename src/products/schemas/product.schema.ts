@@ -1,34 +1,50 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document } from 'mongoose'
+import * as mongoose from 'mongoose'
+import { Comment, CommentSchema } from 'src/comments/schemas/comment.schema'
+import { Item, ItemSchema } from 'src/items/schemas/item.schema'
+import { Rate, RateSchema } from 'src/rates/schemas/rate.schema'
 
-export type ProductDocument = Product & Document;
+export type ProductDocument = Product & Document
 
 @Schema()
 export class Product {
     @Prop({ required: true, type: mongoose.Schema.Types.String })
-    title: string;
+    title: string
 
     @Prop({ required: true, type: mongoose.Schema.Types.String })
-    description: string;
+    description: string
 
     @Prop({ required: true, type: mongoose.Schema.Types.String })
-    thumbImage: string;
+    thumbImage: string
 
     @Prop({ required: true, type: mongoose.Schema.Types.String })
-    location: string;
+    location: string
+
+    @Prop({ required: false, type: [CommentSchema] })
+    comments: Comment[]
+
+    @Prop({
+        required: false,
+        type: [ItemSchema],
+        validate: {
+            validator: (value: Item[]) => value.length >= 1,
+            message: 'The items should contains at least 1 item',
+        },
+    })
+    items: Item[]
+
+    @Prop({ required: false, type: RateSchema })
+    rates: Rate
 
     @Prop({ required: true, type: mongoose.Schema.Types.Array })
-    comments: string;
-
-    @Prop({ required: true, type: mongoose.Schema.Types.Array })
-    notAvailableDAtes: Date[];
+    notAvailableDAtes: Date[]
 
     @Prop({ required: true, type: mongoose.Schema.Types.String })
-    ownerId: string;
+    ownerId: string
 
     @Prop({ default: Date.now, type: mongoose.Schema.Types.Date })
-    createdAt: Date;
+    createdAt: Date
 }
 
-export const ProductSchema = SchemaFactory.createForClass(Product);
+export const ProductSchema = SchemaFactory.createForClass(Product)
