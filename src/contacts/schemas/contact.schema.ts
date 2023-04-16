@@ -12,7 +12,7 @@ export class Contact {
     @Prop({ required: true, type: mongoose.Schema.Types.String })
     email: string;
 
-    @Prop({ required: true, type: mongoose.Schema.Types.String })
+    @Prop({ required: false, type: mongoose.Schema.Types.String })
     phone: string;
 
     @Prop({ required: true, type: mongoose.Schema.Types.String })

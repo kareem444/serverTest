@@ -1,29 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { ContactRepository } from './repositories/contact.repository';
-
+import { Contact } from './schemas/contact.schema';
+import {
+  InternalServerErrorException,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common/exceptions';
+import { String } from 'aws-sdk/clients/acm';
 @Injectable()
 export class ContactsService {
   constructor(private readonly contactRepository: ContactRepository) { }
 
-  create(createContactDto: CreateContactDto) {
-    return 'This action adds a new contact';
+  async create(createContactDto: CreateContactDto):Promise<Contact> {
+    try{
+      return await this.contactRepository.create(createContactDto);
+  } catch (error) {
+    throw new NotAcceptableException();
+    }
   }
 
-  findAll() {
-    return `This action returns all contacts`;
+ async findAll() :Promise<Contact[]> {
+  try{
+    return await this.contactRepository.findAll({})
+} catch (error) {
+  throw new InternalServerErrorException();
+  }
+}
+  async findOne(id: String) :Promise<Contact | null> {
+    try {
+      return await this.contactRepository.findOneById(id);
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contact`;
+  // update(id: number, updateContactDto: UpdateContactDto) {
+  //   return `This action updates a #${id} contact`;
+  // }
+
+  async remove(id: String) {
+    try {
+      await this.contactRepository.findByIdAndDelete(id);
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 
-  update(id: number, updateContactDto: UpdateContactDto) {
-    return `This action updates a #${id} contact`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} contact`;
-  }
 }
