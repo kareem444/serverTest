@@ -1,29 +1,49 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
-import { PaymentRepository } from './repositories/payment.repository';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
+import { PaymentRepository } from './repositories/payment.repository'
+import { AuthType } from 'src/helpers/types/auth.type'
+import { OrdersService } from 'src/orders/orders.service'
+import { CreatePaymentDto } from './dto/create-payment.dto'
+import { Order } from 'src/orders/schemas/order.schema'
+import { Payment } from './schemas/payment.schema'
 
 @Injectable()
 export class PaymentsService {
-  constructor(private readonly paymentRepository: PaymentRepository) { }
+  constructor(
+    private readonly paymentRepository: PaymentRepository,
+    private readonly ordersService: OrdersService,
+  ) { }
 
-  create(createPaymentDto: CreatePaymentDto) {
-    return 'This action adds a new payment';
+  async create(user: AuthType, orderId: string): Promise<void> {
+    const order: Order = await this.ordersService.findOne(orderId)
+
+    if (!order) {
+      throw new NotFoundException('Order not found')
+    }
+
+    const createPaymentDto = new CreatePaymentDto()
+    createPaymentDto.user = user
+    createPaymentDto.order = order;
+
+    try {
+      await this.paymentRepository.create(createPaymentDto)
+    } catch (error) {
+      throw new InternalServerErrorException("Error while creating payment")
+    }
   }
 
-  findAll() {
-    return `This action returns all payments`;
+  async findAll(): Promise<Payment[]> {
+    try {
+      return await this.paymentRepository.findAll();
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} payment`;
-  }
-
-  update(id: number, updatePaymentDto: UpdatePaymentDto) {
-    return `This action updates a #${id} payment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} payment`;
+  async findOne(id: string): Promise<Payment> {
+    try {
+      return await this.paymentRepository.findOneById(id);
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 }

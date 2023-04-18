@@ -1,29 +1,86 @@
-import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductRepository } from './repositories/product.repository';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common'
+import { CreateProductDto } from './dto/create-product.dto'
+import { UpdateProductDto } from './dto/update-product.dto'
+import { ProductRepository } from './repositories/product.repository'
+import { AuthType } from 'src/helpers/types/auth.type'
+import { Product } from './schemas/product.schema'
+import { UserRole } from 'src/helpers/enums/enum.values'
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly productRepository: ProductRepository) { }
 
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  async create(auth: AuthType, createProductDto: CreateProductDto) {
+    createProductDto.ownerId = auth.userId
+    try {
+      return await this.productRepository.create(createProductDto)
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error while trying to create new product',
+      )
+    }
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll(): Promise<Product[]> {
+    try {
+      return await this.productRepository.findAll()
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error while trying to find all products',
+      )
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string): Promise<Product> {
+    try {
+      return await this.productRepository.findOneById(id)
+    } catch (error) {
+      throw new NotFoundException('This product is not exist')
+    }
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(auth: AuthType, id: string, updateProductDto: UpdateProductDto) {
+    await this.checkIfAllowedToAccessProduct(auth, id)
+
+    try {
+      return await this.productRepository.updateOne(
+        { _id: id },
+        updateProductDto,
+      )
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error while trying to update this product',
+      )
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(auth: AuthType, id: string) {
+    await this.checkIfAllowedToAccessProduct(auth, id)
+
+    try {
+      return await this.productRepository.deleteOne({ _id: id })
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error while trying to remove this product',
+      )
+    }
+  }
+
+  private async checkIfAllowedToAccessProduct(
+    auth: AuthType,
+    id: string,
+  ): Promise<Product> {
+    const product: Product = await this.findOne(id)
+
+    if (product.ownerId !== auth.userId || auth.role !== UserRole.ADMIN) {
+      throw new ForbiddenException('You are not allowed to remove this product')
+    } else {
+      return product
+    }
   }
 }

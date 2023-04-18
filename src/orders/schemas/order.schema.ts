@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import * as mongoose from 'mongoose'
+import { EnumStatues } from 'src/helpers/enums/enum.values'
 import { OrderProduct } from 'src/helpers/types/product.types'
 
 export type OrderDocument = Order & Document
@@ -8,13 +9,14 @@ export type OrderDocument = Order & Document
 @Schema()
 export class Order {
     @Prop({ required: true, type: mongoose.Schema.Types.String })
-    name: string
+    ownerId: string
 
-    @Prop({ required: true, type: mongoose.Schema.Types.String })
-    userId: string
-
-    @Prop({ required: true, type: mongoose.Schema.Types.String })
-    status: string
+    @Prop({
+        required: false,
+        default: EnumStatues.PENDING,
+        type: mongoose.Schema.Types.String,
+    })
+    status: EnumStatues
 
     @Prop({ required: true, min: 1, type: mongoose.Schema.Types.Array })
     product: OrderProduct

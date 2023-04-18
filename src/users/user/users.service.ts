@@ -7,7 +7,6 @@ import {
   NotFoundException,
   NotAcceptableException,
 } from '@nestjs/common/exceptions';
-import { UpdateWriteOpResult } from 'mongoose';
 
 @Injectable()
 export class UsersService {
@@ -32,9 +31,9 @@ export class UsersService {
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
-  ): Promise<UpdateWriteOpResult> {
+  ): Promise<User> {
     try {
-      return await this.userRepository.updateOne({ _id: id }, updateUserDto);
+      return await this.userRepository.findOneAndUpdate({ _id: id }, updateUserDto);
     } catch (error) {
       throw new NotAcceptableException();
     }

@@ -10,14 +10,14 @@ import {
 } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { UpdateUserDto } from './dto/update-user.dto'
-import CustomFileHelper from 'src/helpers/files/custom_file_helper'
 import { Auth } from 'src/helpers/decorators/auth.decorator'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 import { Uploaded } from 'src/helpers/decorators/uploaded.decorator'
 import CustomUploadFile from 'src/helpers/files/custom_upload_file.multer'
-import { EnumUploadedOptions, UserRole } from 'src/helpers/enums/enum.values'
+import { EnumFileType, EnumUploadedOptions, UserRole } from 'src/helpers/enums/enum.values'
 import { Roles } from '../auth/role/roles.decorator'
 import { RoleGuard } from '../auth/role/role.guard'
+import { AuthType } from 'src/helpers/types/auth.type'
 
 @Controller('users')
 export class UsersController {
@@ -40,23 +40,24 @@ export class UsersController {
   }
 
   @Patch()
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @UseInterceptors(CustomUploadFile())
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(CustomUploadFile({ type: EnumFileType.IMAGE, path: "users/avatar" }))
   update(
-    @Auth() auth,
-    @Uploaded({ 
-      option: EnumUploadedOptions.FULL_PATH 
-    })
-    file: Express.Multer.File,
+    @Auth() auth: AuthType,
     @Body() updateUserDto: UpdateUserDto,
+    @Uploaded({
+      option: EnumUploadedOptions.FULL_PATH,
+    })
+    filePath?: string,
   ) {
-    if (file) {
-      updateUserDto.avatar = CustomFileHelper.fileFullPath(file)
+    if (filePath) {
+      updateUserDto.avatar = filePath
     }
     return this.usersService.update(auth.userId, updateUserDto)
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.delete(id)

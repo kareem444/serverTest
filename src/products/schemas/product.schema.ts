@@ -25,7 +25,7 @@ export class Product {
     comments: Comment[]
 
     @Prop({
-        required: false,
+        required: true,
         type: [ItemSchema],
         validate: {
             validator: (value: Item[]) => value.length >= 1,
@@ -37,7 +37,7 @@ export class Product {
     @Prop({ required: false, type: RateSchema })
     rates: Rate
 
-    @Prop({ required: true, type: mongoose.Schema.Types.Array })
+    @Prop({ required: false, type: mongoose.Schema.Types.Array })
     notAvailableDAtes: Date[]
 
     @Prop({ required: true, type: mongoose.Schema.Types.String })

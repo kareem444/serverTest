@@ -6,7 +6,5 @@ export interface OrderProduct {
         name: string
         quantity: number
         price: string
-        image?: string
-        totalPrice: string
     }[]
 }

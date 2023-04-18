@@ -9,11 +9,8 @@ export class Item {
     @Prop({ required: true, type: mongoose.Schema.Types.String })
     name: string
 
-    @Prop({ required: true, type: mongoose.Schema.Types.String })
-    description: string
-
     @Prop({ required: false, type: mongoose.Schema.Types.String })
-    image: string
+    description?: string
 
     @Prop({
         required: false,
@@ -23,7 +20,7 @@ export class Item {
     })
     quantity: number
 
-    @Prop({ required: false, type: mongoose.Schema.Types.Number })
+    @Prop({ required: false, min: 0, type: mongoose.Schema.Types.Number })
     minQuantity: number
 
     @Prop({ required: false, min: 1, type: mongoose.Schema.Types.Number })

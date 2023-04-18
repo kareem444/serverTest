@@ -35,7 +35,7 @@ interface UploadFileOptions {
 }
 
 const handleUploadFileOptions = (options: UploadFileOptions): MulterOptions => {
-    const { path, type, mainDir, maxSize } = options
+    const { path, type, maxSize } = options
     return {
         limits: {
             fileSize: maxSize,

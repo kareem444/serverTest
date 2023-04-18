@@ -7,17 +7,20 @@ export type RateDocument = Rate & Document
 
 @Schema()
 export class Rate {
-    @Prop({ required: true, type: mongoose.Schema.Types.Number })
+    @Prop({ required: true, default: 0, type: mongoose.Schema.Types.Number })
     numberOfRates: number
 
-    @Prop({ required: true, type: mongoose.Schema.Types.Number })
+    @Prop({ required: true, default: 0, type: mongoose.Schema.Types.Number })
     totalRates: number
 
-    @Prop({ required: true, type: mongoose.Schema.Types.Array })
+    @Prop({ required: true, default: [], type: mongoose.Schema.Types.Array })
     users: RateUser[]
 
     @Prop({ default: Date.now, type: mongoose.Schema.Types.Date })
     createdAt: Date
+
+    @Prop({ default: Date.now, type: mongoose.Schema.Types.Date })
+    updatedAt: Date
 }
 
 export const RateSchema = SchemaFactory.createForClass(Rate)
