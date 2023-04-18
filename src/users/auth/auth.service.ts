@@ -39,7 +39,7 @@ export class AuthService {
 
   private async validateUser(loginAuthDto: LoginAuthDto): Promise<User> {
     const user = await this.userRepository.findOne({
-      phone: loginAuthDto.phone,
+      email: loginAuthDto.email
     })
 
     if (
