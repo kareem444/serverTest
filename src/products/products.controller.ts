@@ -27,7 +27,7 @@ import { Auth } from 'src/helpers/decorators/auth.decorator'
 import { AuthType } from 'src/helpers/types/auth.type'
 import CustomUploadFile from 'src/helpers/files/custom_upload_file.multer'
 import { Uploaded } from 'src/helpers/decorators/uploaded.decorator'
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiConsumes, ApiTags, ApiOperation } from '@nestjs/swagger'
 import { CreateProductSwaggerDto } from 'src/helpers/swagger_dto/create-product-swagger.dto'
 import { UpdateProductSwaggerDto } from 'src/helpers/swagger_dto/update-product-swagger.dto'
 
@@ -36,6 +36,7 @@ import { UpdateProductSwaggerDto } from 'src/helpers/swagger_dto/update-product-
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
+  @ApiOperation({ deprecated: true  , description:"Test this endpoint with postman"})
   @Roles(UserRole.ADMIN, UserRole.SELLER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @UseInterceptors(
@@ -72,6 +73,7 @@ export class ProductsController {
     return this.productsService.findOne(productId)
   }
 
+  @ApiOperation({ deprecated: true  , description:"Test this endpoint with postman"})
   @Roles(UserRole.ADMIN, UserRole.SELLER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiConsumes('multipart/form-data')
