@@ -18,11 +18,11 @@ export class Order {
     })
     status: EnumStatues
 
-    @Prop({ required: true, min: 1, type: mongoose.Schema.Types.Array })
+    @Prop({ required: true, min: 1, type: mongoose.Schema.Types.Map })
     product: OrderProduct
 
-    @Prop({ required: true, type: mongoose.Schema.Types.String })
-    price: string
+    @Prop({ required: true, type: mongoose.Schema.Types.Number })
+    price: number
 
     @Prop({ default: Date.now, type: mongoose.Schema.Types.Date })
     createdAt: Date

@@ -8,7 +8,7 @@ export type PaymentDocument = Payment & Document;
 
 @Schema()
 export class Payment {
-    @Prop({ required: true, type: mongoose.Schema.Types.String })
+    @Prop({ required: true, type: mongoose.Schema.Types.Map })
     user: AuthType;
 
     @Prop({ required: true, type: OrderSchema })

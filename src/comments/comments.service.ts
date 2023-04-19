@@ -21,7 +21,9 @@ export class CommentsService {
 
     createCommentDto.user = {
       id: auth.userId,
-      ...user
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
     }
 
     try {

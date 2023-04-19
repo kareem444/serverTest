@@ -7,16 +7,20 @@ import { ProductsModule } from './products/products.module';
 import { PaymentsModule } from './payments/payments.module';
 import { OrdersModule } from './orders/orders.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { CommentsModule } from './comments/comments.module';
+import { RatesModule } from './rates/rates.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGODB_URI),
-    UsersModule,
     AuthModule,
+    UsersModule,
     ProductsModule,
-    PaymentsModule,
+    CommentsModule,
+    RatesModule,
     OrdersModule,
+    PaymentsModule,
     ContactsModule,
   ],
 })

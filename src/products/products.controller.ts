@@ -9,6 +9,9 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common'
+import {
+  NotAcceptableException
+} from '@nestjs/common/exceptions'
 import { ProductsService } from './products.service'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
@@ -24,7 +27,11 @@ import { Auth } from 'src/helpers/decorators/auth.decorator'
 import { AuthType } from 'src/helpers/types/auth.type'
 import CustomUploadFile from 'src/helpers/files/custom_upload_file.multer'
 import { Uploaded } from 'src/helpers/decorators/uploaded.decorator'
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger'
+import { CreateProductSwaggerDto } from 'src/helpers/swagger_dto/create-product-swagger.dto'
+import { UpdateProductSwaggerDto } from 'src/helpers/swagger_dto/update-product-swagger.dto'
 
+@ApiTags("products")
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
@@ -34,6 +41,11 @@ export class ProductsController {
   @UseInterceptors(
     CustomUploadFile({ type: EnumFileType.IMAGE, path: 'product/thumbImage' }),
   )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Create new product',
+    type: CreateProductSwaggerDto,
+  })
   @Post()
   create(
     @Auth() auth: AuthType,
@@ -43,9 +55,10 @@ export class ProductsController {
     })
     filePath?: string,
   ) {
-    if (filePath) {
-      createProductDto.thumbImage = filePath
+    if (!filePath) {
+      throw new NotAcceptableException('Thumb image is required, please upload the file')
     }
+    createProductDto.thumbImage = filePath
     return this.productsService.create(auth, createProductDto)
   }
 
@@ -61,6 +74,11 @@ export class ProductsController {
 
   @Roles(UserRole.ADMIN, UserRole.SELLER)
   @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Update product',
+    type: UpdateProductSwaggerDto,
+  })
   @UseInterceptors(
     CustomUploadFile({ type: EnumFileType.IMAGE, path: 'product/thumbImage' }),
   )

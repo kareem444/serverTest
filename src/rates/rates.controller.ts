@@ -4,11 +4,17 @@ import { RatesService } from './rates.service';
 import { JwtAuthGuard } from 'src/users/auth/guards/jwt-auth.guard';
 import { AuthType } from 'src/helpers/types/auth.type';
 import { CreateRateDto } from './dto/create-rate.dto';
+import {ApiBody, ApiTags} from '@nestjs/swagger'
 
+@ApiTags("rates")
 @Controller('rates')
 export class RatesController {
     constructor(private readonly rateService: RatesService) { }
 
+    @ApiBody({
+        description: 'Add rate to product',
+        type: CreateRateDto,
+    })
     @UseGuards(JwtAuthGuard)
     @Post(':productId')
     create(

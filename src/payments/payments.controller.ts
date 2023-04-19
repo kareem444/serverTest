@@ -9,16 +9,18 @@ import { PaymentsService } from './payments.service';
 import { JwtAuthGuard } from 'src/users/auth/guards/jwt-auth.guard';
 import { Auth } from 'src/helpers/decorators/auth.decorator';
 import { AuthType } from 'src/helpers/types/auth.type';
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags("payment")
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) { }
 
   @UseGuards(JwtAuthGuard)
-  @Post(':id')
+  @Post(':orderId')
   create(
     @Auth() auth: AuthType,
-    @Param('id') orderId: string,
+    @Param('orderId') orderId: string,
   ) {
     return this.paymentsService.create(auth, orderId);
   }

@@ -5,6 +5,6 @@ export interface OrderProduct {
     items: {
         name: string
         quantity: number
-        price: string
+        price: number
     }[]
 }

@@ -5,7 +5,9 @@ import { Roles } from './../users/auth/role/roles.decorator';
 import { UserRole } from 'src/helpers/enums/enum.values';
 import { JwtAuthGuard } from 'src/users/auth/guards/jwt-auth.guard';
 import { RoleGuard } from 'src/users/auth/role/role.guard';
+import {ApiTags} from '@nestjs/swagger'
 
+@ApiTags("contacts")
 @Controller('contacts')
 export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}

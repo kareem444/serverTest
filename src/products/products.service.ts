@@ -20,6 +20,7 @@ export class ProductsService {
     try {
       return await this.productRepository.create(createProductDto)
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException(
         'Error while trying to create new product',
       )
@@ -45,7 +46,7 @@ export class ProductsService {
   }
 
   async update(auth: AuthType, id: string, updateProductDto: UpdateProductDto) {
-    await this.checkIfAllowedToAccessProduct(auth, id)
+    await this.checkIfCanAccessProduct(auth, id)
 
     try {
       return await this.productRepository.updateOne(
@@ -60,7 +61,7 @@ export class ProductsService {
   }
 
   async remove(auth: AuthType, id: string) {
-    await this.checkIfAllowedToAccessProduct(auth, id)
+    await this.checkIfCanAccessProduct(auth, id)
 
     try {
       return await this.productRepository.deleteOne({ _id: id })
@@ -71,13 +72,17 @@ export class ProductsService {
     }
   }
 
-  private async checkIfAllowedToAccessProduct(
+  private async checkIfCanAccessProduct(
     auth: AuthType,
     id: string,
   ): Promise<Product> {
     const product: Product = await this.findOne(id)
 
-    if (product.ownerId !== auth.userId || auth.role !== UserRole.ADMIN) {
+    if (!product) {
+      throw new NotFoundException()
+    }
+
+    if (product?.ownerId !== auth.userId || auth.role !== UserRole.ADMIN) {
       throw new ForbiddenException('You are not allowed to remove this product')
     } else {
       return product

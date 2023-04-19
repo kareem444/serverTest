@@ -20,7 +20,7 @@ export class UsersService {
     }
   }
 
-  async findOne(id: string): Promise<User | null> {
+  async findOne(id: string){
     try {
       return await this.userRepository.findOneById(id);
     } catch (error) {
@@ -31,9 +31,9 @@ export class UsersService {
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
-  ): Promise<User> {
+  ) {
     try {
-      return await this.userRepository.findOneAndUpdate({ _id: id }, updateUserDto);
+      return await this.userRepository.updateOne({ _id: id }, updateUserDto);
     } catch (error) {
       throw new NotAcceptableException();
     }
@@ -41,7 +41,7 @@ export class UsersService {
 
   async delete(id: string): Promise<void> {
     try {
-      await this.userRepository.findByIdAndDelete(id);
+      await this.userRepository.deleteOne({_id:id});
     } catch (error) {
       throw new NotFoundException();
     }

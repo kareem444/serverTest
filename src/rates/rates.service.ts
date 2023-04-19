@@ -21,9 +21,19 @@ export class RatesService {
       throw new NotFoundException('Product not found')
     }
 
-    const user: RateUser = product.rates.users.find(e => e.id == auth.userId)
+    const user: RateUser = product.rates?.users.find(e => e.id == auth.userId)
 
-    const rates: Rate = product.rates
+    const rates: (Rate | null) = product.rates
+
+    if (!rates) {
+      return await this.productRepository.updateOne({ _id: productId }, {
+        rates: {
+          numberOfRates: 1,
+          totalRates: createRateDto.rate,
+          users: [{ id: auth.userId, rate: createRateDto.rate }],
+        },
+      })
+    }
 
     if (user) {
       rates.totalRates -= user.rate

@@ -20,6 +20,8 @@ export class PaymentsService {
       throw new NotFoundException('Order not found')
     }
 
+    
+
     const createPaymentDto = new CreatePaymentDto()
     createPaymentDto.user = user
     createPaymentDto.order = order;
@@ -27,6 +29,7 @@ export class PaymentsService {
     try {
       await this.paymentRepository.create(createPaymentDto)
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException("Error while creating payment")
     }
   }

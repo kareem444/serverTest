@@ -13,8 +13,13 @@ export class OrdersService {
   async create(auth: AuthType, createOrderDto: CreateOrderDto) {
     createOrderDto.ownerId = auth.userId
     try {
+      createOrderDto.price = 0
+      createOrderDto.product.items.forEach(e => {
+        createOrderDto.price += e.price
+      })
       return await this.orderRepository.create(createOrderDto)
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException("Error creating order. Please try again later.");
     }
   }
@@ -40,6 +45,10 @@ export class OrdersService {
     await this.checkIfCanAccessOrder(auth, id)
 
     try {
+      updateOrderDto.price = 0
+      updateOrderDto.product.items.forEach(e => {
+        updateOrderDto.price += e.price
+      })
       return await this.orderRepository.findOneAndUpdate({ _id: id }, updateOrderDto)
     }
     catch (error) {
@@ -60,6 +69,10 @@ export class OrdersService {
 
   async checkIfCanAccessOrder(auth: AuthType, id: string,): Promise<Order> {
     const order: Order = await this.findOne(id)
+
+    if (!order) {
+      throw new NotFoundException()
+    }
 
     if (order.ownerId !== auth.userId || auth.role !== UserRole.ADMIN) {
       throw new ForbiddenException()

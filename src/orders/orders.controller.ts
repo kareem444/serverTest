@@ -14,13 +14,20 @@ import { UpdateOrderDto } from './dto/update-order.dto'
 import { JwtAuthGuard } from 'src/users/auth/guards/jwt-auth.guard'
 import { Auth } from 'src/helpers/decorators/auth.decorator'
 import { AuthType } from 'src/helpers/types/auth.type'
+import { ApiBody, ApiTags } from '@nestjs/swagger'
+import { UpdateOrderSwaggerDto } from 'src/helpers/swagger_dto/update-order-swagger.dto'
 
+@ApiTags("orders")
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) { }
 
   @UseGuards(JwtAuthGuard)
   @Post()
+  @ApiBody({
+    description: 'Create new order',
+    type: CreateOrderDto,
+  })
   create(@Auth() auth: AuthType, @Body() createOrderDto: CreateOrderDto) {
     return this.ordersService.create(auth, createOrderDto)
   }
@@ -32,6 +39,10 @@ export class OrdersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBody({
+    description: 'Update order',
+    type: UpdateOrderSwaggerDto,
+  })
   @Patch(':orderId')
   update(
     @Auth() auth: AuthType,
