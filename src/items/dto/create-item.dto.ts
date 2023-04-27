@@ -28,6 +28,17 @@ export class CreateItemDto {
     })
     description: string
 
+    @Transform((value) => +value.value)
+    @IsNumber()
+    @Min(1)
+    @ApiPropertyOptional({
+        type: Number,
+        default: 1,
+        description: 'The available price for one item'   ,
+        name: 'price',
+    })
+    price: number
+
     @IsOptional()
     @Transform((value) => +value.value)
     @IsNumber()
@@ -39,7 +50,7 @@ export class CreateItemDto {
         name: 'quantity',
     })
     quantity: number
-    
+
     @IsOptional()
     @IsNumber()
     @Transform((value) => +value.value)
@@ -48,11 +59,11 @@ export class CreateItemDto {
         type: Number,
         default: 0,
         description:
-        'The minimum amount of this item that the user should choose to have the product, make it 0 to make this item optional',
+            'The minimum amount of this item that the user should choose to have the product, make it 0 to make this item optional',
         name: 'minQuantity',
     })
     minQuantity: number
-    
+
     @IsOptional()
     @IsNumber()
     @Transform((value) => +value.value)

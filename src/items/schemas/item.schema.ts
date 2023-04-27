@@ -18,6 +18,14 @@ export class Item {
         default: 1,
         type: mongoose.Schema.Types.Number,
     })
+    price: number
+
+    @Prop({
+        required: false,
+        min: 1,
+        default: 1,
+        type: mongoose.Schema.Types.Number,
+    })
     quantity: number
 
     @Prop({ required: false, min: 0, type: mongoose.Schema.Types.Number })
