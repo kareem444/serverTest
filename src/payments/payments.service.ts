@@ -20,8 +20,6 @@ export class PaymentsService {
       throw new NotFoundException('Order not found')
     }
 
-    
-
     const createPaymentDto = new CreatePaymentDto()
     createPaymentDto.user = user
     createPaymentDto.order = order;
@@ -37,6 +35,19 @@ export class PaymentsService {
   async findAll(): Promise<Payment[]> {
     try {
       return await this.paymentRepository.findAll();
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async findUserPayments(
+    user: AuthType
+  ): Promise<Payment[]> {
+    try {
+      console.log(user);
+      return await this.paymentRepository.findAll({
+        "user.userId": user.userId
+      });
     } catch (error) {
       throw new InternalServerErrorException();
     }

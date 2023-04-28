@@ -17,6 +17,9 @@ export class User {
     password: string;
 
     @Prop({ required: false, type: mongoose.Schema.Types.String })
+    bio: string;
+
+    @Prop({ required: false, type: mongoose.Schema.Types.String })
     role: UserRole;
 
     @Prop({ required: false, type: mongoose.Schema.Types.String })

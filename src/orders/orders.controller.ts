@@ -16,6 +16,9 @@ import { Auth } from 'src/helpers/decorators/auth.decorator'
 import { AuthType } from 'src/helpers/types/auth.type'
 import { ApiBody, ApiTags } from '@nestjs/swagger'
 import { UpdateOrderSwaggerDto } from 'src/helpers/swagger_dto/update-order-swagger.dto'
+import { Roles } from 'src/users/auth/role/roles.decorator'
+import { UserRole } from 'src/helpers/enums/enum.values'
+import { RoleGuard } from 'src/users/auth/role/role.guard'
 
 @ApiTags("orders")
 @Controller('orders')
@@ -32,10 +35,17 @@ export class OrdersController {
     return this.ordersService.create(auth, createOrderDto)
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
-  findAll(@Auth() auth: AuthType) {
-    return this.ordersService.findAll(auth)
+  findAll() {
+    return this.ordersService.findAll()
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("myOrders")
+  findUserOrders(@Auth() auth: AuthType) {
+    return this.ordersService.findUserOrders(auth)
   }
 
   @UseGuards(JwtAuthGuard)

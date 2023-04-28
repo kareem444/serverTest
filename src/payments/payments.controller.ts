@@ -10,6 +10,9 @@ import { JwtAuthGuard } from 'src/users/auth/guards/jwt-auth.guard';
 import { Auth } from 'src/helpers/decorators/auth.decorator';
 import { AuthType } from 'src/helpers/types/auth.type';
 import { ApiTags } from '@nestjs/swagger'
+import { Roles } from 'src/users/auth/role/roles.decorator';
+import { UserRole } from 'src/helpers/enums/enum.values';
+import { RoleGuard } from 'src/users/auth/role/role.guard';
 
 @ApiTags("payment")
 @Controller('payments')
@@ -25,10 +28,19 @@ export class PaymentsController {
     return this.paymentsService.create(auth, orderId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard , RoleGuard)
   @Get()
   findAll() {
     return this.paymentsService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("my_Payments")
+  findUserPayments(
+    @Auth() auth: AuthType,
+  ) {
+    return this.paymentsService.findUserPayments(auth);
   }
 
   @UseGuards(JwtAuthGuard)

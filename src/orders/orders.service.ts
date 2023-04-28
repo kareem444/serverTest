@@ -24,7 +24,16 @@ export class OrdersService {
     }
   }
 
-  async findAll(auth: AuthType,) {
+  async findAll() {
+    try {
+      return await this.orderRepository.findAll()
+    }
+    catch (error) {
+      throw new InternalServerErrorException("Error fetching orders. Please try again later.");
+    }
+  }
+
+  async findUserOrders(auth: AuthType,) {
     try {
       return await this.orderRepository.findAll({ ownerId: auth.userId })
     }

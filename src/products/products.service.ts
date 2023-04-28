@@ -37,6 +37,16 @@ export class ProductsService {
     }
   }
 
+  async findMyProducts(auth: AuthType): Promise<Product[]> {
+    try {
+      return await this.productRepository.findAll({ ownerId: auth.userId })
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error while trying to find all products',
+      )
+    }
+  }
+
   async findOne(id: string): Promise<Product> {
     try {
       return await this.productRepository.findOneById(id)

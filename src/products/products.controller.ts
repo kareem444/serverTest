@@ -36,7 +36,7 @@ import { UpdateProductSwaggerDto } from 'src/helpers/swagger_dto/update-product-
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
-  @ApiOperation({ deprecated: true  , description:"Test this endpoint with postman"})
+  @ApiOperation({ deprecated: true, description: "Test this endpoint with postman" })
   @Roles(UserRole.ADMIN, UserRole.SELLER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @UseInterceptors(
@@ -63,9 +63,19 @@ export class ProductsController {
     return this.productsService.create(auth, createProductDto)
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
   findAll() {
     return this.productsService.findAll()
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("myProducts")
+  findMyProducts(
+    @Auth() auth: AuthType,
+  ) {
+    return this.productsService.findMyProducts(auth)
   }
 
   @Get(':productId')
@@ -73,7 +83,7 @@ export class ProductsController {
     return this.productsService.findOne(productId)
   }
 
-  @ApiOperation({ deprecated: true  , description:"Test this endpoint with postman"})
+  @ApiOperation({ deprecated: true, description: "Test this endpoint with postman" })
   @Roles(UserRole.ADMIN, UserRole.SELLER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiConsumes('multipart/form-data')
