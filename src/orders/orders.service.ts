@@ -42,6 +42,15 @@ export class OrdersService {
     }
   }
 
+  async requestsOrders(auth: AuthType,) {
+    try {
+      return await this.orderRepository.findAll({ sellerId: auth.userId })
+    }
+    catch (error) {
+      throw new InternalServerErrorException("Error fetching orders. Please try again later.");
+    }
+  }
+
   async findOne(id: string): Promise<Order> {
     try {
       return await this.orderRepository.findOneById(id);

@@ -11,6 +11,9 @@ export class Order {
     @Prop({ required: true, type: mongoose.Schema.Types.String })
     ownerId: string
 
+    @Prop({ required: true, type: mongoose.Schema.Types.String })
+    sellerId: string
+
     @Prop({
         required: false,
         default: EnumStatues.PENDING,

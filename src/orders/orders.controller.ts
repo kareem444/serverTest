@@ -49,6 +49,12 @@ export class OrdersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get("requestsOrders")
+  requestsOrders(@Auth() auth: AuthType) {
+    return this.ordersService.requestsOrders(auth)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @ApiBody({
     description: 'Update order',
     type: UpdateOrderSwaggerDto,

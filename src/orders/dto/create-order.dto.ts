@@ -2,7 +2,8 @@ import {
     IsNotEmpty,
     IsOptional,
     IsEnum,
-    ValidateNested
+    ValidateNested,
+    IsString
 } from 'class-validator';
 import { EnumStatues } from 'src/helpers/enums/enum.values';
 import { Type } from 'class-transformer'
@@ -20,6 +21,11 @@ export class CreateOrderDto {
     @ValidateNested({ each: true })
     @Type(() => ValidatedOrderProduct)
     product: ValidatedOrderProduct
+
+    @ApiProperty({ type: String, name: "sellerId", required: true })
+    @IsNotEmpty()
+    @IsString()
+    sellerId: String
 
     price: number
 
