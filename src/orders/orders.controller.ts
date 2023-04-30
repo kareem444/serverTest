@@ -43,7 +43,7 @@ export class OrdersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':orderId')
+  @Get('order/:orderId')
   finOne(
     @Auth() auth: AuthType,
     @Param('orderId') orderId: string
