@@ -91,8 +91,8 @@ export class ProductsService {
       throw new NotFoundException()
     }
 
-    if (product?.ownerId !== auth.userId || auth.role !== UserRole.ADMIN) {
-      throw new ForbiddenException('You are not allowed to remove this product')
+    if (product?.ownerId !== auth.userId) {
+      throw new ForbiddenException('You are not allowed to access this product')
     } else {
       return product
     }
