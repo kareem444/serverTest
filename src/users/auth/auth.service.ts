@@ -23,7 +23,6 @@ export class AuthService {
     try {
       return await this.userRepository.create(createUserDto)
     } catch (error) {
-      console.log(`error`, error);
       throw new BadRequestException()
     }
   }

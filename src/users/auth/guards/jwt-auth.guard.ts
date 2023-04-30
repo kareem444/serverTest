@@ -14,8 +14,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     //         // response.redirect('http://127.0.0.1:3000/auth/login');
     //     }
 
-    //     console.log(`request`, request.user);
-    //     console.log(`user`, user);
     //     return user;
     // }
 }

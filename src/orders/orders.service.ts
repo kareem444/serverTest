@@ -19,7 +19,6 @@ export class OrdersService {
       })
       return await this.orderRepository.create(createOrderDto)
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException("Error creating order. Please try again later.");
     }
   }

@@ -27,7 +27,6 @@ export class PaymentsService {
     try {
       await this.paymentRepository.create(createPaymentDto)
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException("Error while creating payment")
     }
   }
@@ -44,7 +43,6 @@ export class PaymentsService {
     user: AuthType
   ): Promise<Payment[]> {
     try {
-      console.log(user);
       return await this.paymentRepository.findAll({
         "user.userId": user.userId
       });

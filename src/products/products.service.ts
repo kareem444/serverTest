@@ -20,7 +20,6 @@ export class ProductsService {
     try {
       return await this.productRepository.create(createProductDto)
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException(
         'Error while trying to create new product',
       )

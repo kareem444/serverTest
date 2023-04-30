@@ -56,7 +56,6 @@ export class CreateProductDto {
     //         if (typeof value.value == 'string') {
     //             let val = JSON.parse(value.value)
     //             if (typeof val == "object") {
-    //                 console.log(val);
     //                 val = [...val]
     //             }
     //             value.obj[value.key] = val
@@ -64,7 +63,6 @@ export class CreateProductDto {
 
     //         return [...value.value]
     //     } catch (error) {
-    //         console.log(error);
     //         throw new BadRequestException("The item should be array of items")
     //     }
     // })

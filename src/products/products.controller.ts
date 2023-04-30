@@ -63,8 +63,6 @@ export class ProductsController {
     return this.productsService.create(auth, createProductDto)
   }
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
   findAll() {
     return this.productsService.findAll()

@@ -66,7 +66,6 @@ export class UsersController {
     })
     filePath?: string,
   ) {
-    console.log(updateUserDto);
     if (filePath) {
       updateUserDto.avatar = filePath
     }
