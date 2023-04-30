@@ -14,7 +14,7 @@ export class PaymentsService {
   ) { }
 
   async create(user: AuthType, orderId: string): Promise<void> {
-    const order: Order = await this.ordersService.findOne(orderId)
+    const order: Order = await this.ordersService.findOrder(orderId)
 
     if (!order) {
       throw new NotFoundException('Order not found')

@@ -43,6 +43,15 @@ export class OrdersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get(':orderId')
+  finOne(
+    @Auth() auth: AuthType,
+    @Param('orderId') orderId: string
+  ) {
+    return this.ordersService.findOne(auth, orderId)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get("myOrders")
   findUserOrders(@Auth() auth: AuthType) {
     return this.ordersService.findUserOrders(auth)

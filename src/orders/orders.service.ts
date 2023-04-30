@@ -50,7 +50,21 @@ export class OrdersService {
     }
   }
 
-  async findOne(id: string): Promise<Order> {
+  async findOne(auth: AuthType, orderId: string): Promise<Order> {
+    try {
+      const order: Order = await this.orderRepository.findOneById(orderId);
+      if (auth.role == UserRole.ADMIN || order.sellerId == auth.userId || order.ownerId == auth.userId) {
+        return order
+      }
+      else {
+        throw new ForbiddenException()
+      }
+    } catch (error) {
+      throw new NotFoundException();
+    }
+  }
+
+  async findOrder(id: string): Promise<Order> {
     try {
       return await this.orderRepository.findOneById(id);
     } catch (error) {
@@ -85,7 +99,7 @@ export class OrdersService {
   }
 
   async checkIfCanAccessOrder(auth: AuthType, id: string,): Promise<Order> {
-    const order: Order = await this.findOne(id)
+    const order: Order = await this.findOrder(id)
 
     if (!order) {
       throw new NotFoundException()
