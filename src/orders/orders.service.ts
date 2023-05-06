@@ -105,12 +105,10 @@ export class OrdersService {
       throw new NotFoundException()
     }
 
-    if (order.ownerId !== auth.userId || auth.role !== UserRole.ADMIN) {
-      throw new ForbiddenException()
-    }
-    else {
+    if (order.ownerId == auth.userId || auth.role == UserRole.ADMIN) {
       return order
     }
-  }
 
+    throw new ForbiddenException()
+  }
 }
