@@ -4,15 +4,17 @@ import {
   Post,
   Param,
   UseGuards,
+  Body,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { JwtAuthGuard } from 'src/users/auth/guards/jwt-auth.guard';
 import { Auth } from 'src/helpers/decorators/auth.decorator';
 import { AuthType } from 'src/helpers/types/auth.type';
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiTags } from '@nestjs/swagger'
 import { Roles } from 'src/users/auth/role/roles.decorator';
 import { UserRole } from 'src/helpers/enums/enum.values';
 import { RoleGuard } from 'src/users/auth/role/role.guard';
+import { StripePaymentDto } from './dto/stripe-payment.dto';
 
 @ApiTags("payment")
 @Controller('payments')
@@ -20,7 +22,7 @@ export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) { }
 
   @UseGuards(JwtAuthGuard)
-  @Post(':orderId')
+  @Post('create/:orderId')
   create(
     @Auth() auth: AuthType,
     @Param('orderId') orderId: string,
@@ -28,8 +30,20 @@ export class PaymentsController {
     return this.paymentsService.create(auth, orderId);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBody({
+    description: 'Create stripe intent client secrete',
+    type: StripePaymentDto,
+  })
+  @Post('intentStripe')
+  intentStripe(
+    @Body() stripePaymentDto: StripePaymentDto,
+  ) {
+    return this.paymentsService.intentStripe(stripePaymentDto);
+  }
+
   @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthGuard , RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
   findAll() {
     return this.paymentsService.findAll();
