@@ -7,7 +7,6 @@ import {
   NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common/exceptions';
-import { String } from 'aws-sdk/clients/acm';
 
 @Injectable()
 export class ContactsService {
@@ -28,7 +27,7 @@ export class ContactsService {
       throw new InternalServerErrorException();
     }
   }
-  async findOne(id: String): Promise<Contact | null> {
+  async findOne(id: string): Promise<Contact | null> {
     try {
       return await this.contactRepository.findOneById(id);
     } catch (error) {
@@ -36,7 +35,7 @@ export class ContactsService {
     }
   }
 
-  async remove(id: String) {
+  async remove(id: string) {
     try {
       await this.contactRepository.findByIdAndDelete(id);
     } catch (error) {

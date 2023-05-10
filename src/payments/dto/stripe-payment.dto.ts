@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { double } from 'aws-sdk/clients/lightsail';
+
 import {
     IsNotEmpty,
     IsString,
@@ -11,7 +11,7 @@ export class StripePaymentDto {
     @IsNotEmpty()
     @IsNumber()
     @ApiProperty({ type: Number, default: 20, name: 'amount' })
-    amount: double;
+    amount: number;
 
     @IsOptional()
     @IsString()
