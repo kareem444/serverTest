@@ -32,6 +32,7 @@ export enum EnumStatues {
     CANCELED = 'CANCELED',
     COMPLETED = 'COMPLETED',
     FAILED = 'FAILED',
+    PAID = 'PAID',
     UNKNOWN = 'UNKNOWN'
 }
 
