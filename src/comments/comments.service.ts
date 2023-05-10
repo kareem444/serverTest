@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { InternalServerErrorException } from '@nestjs/common/exceptions'
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common/exceptions'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { ProductRepository } from 'src/products/repositories/product.repository'
 import { UsersService } from 'src/users/user/users.service'
@@ -32,6 +32,23 @@ export class CommentsService {
           comments: createCommentDto
         }
       })
+    } catch (error) {
+      throw new InternalServerErrorException()
+    }
+  }
+
+  async delete(
+    productId: string,
+    commentId: string,
+  ) {
+    try {
+      return await this.productRepository.updateOne({ _id: productId }, {
+        $pull: {
+          comments: {
+            _id: commentId
+          }
+        }
+      });
     } catch (error) {
       throw new InternalServerErrorException()
     }
