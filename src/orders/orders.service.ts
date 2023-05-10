@@ -105,7 +105,7 @@ export class OrdersService {
       throw new NotFoundException()
     }
 
-    if (order.ownerId == auth.userId || auth.role == UserRole.ADMIN) {
+    if (order.ownerId == auth.userId || order.sellerId == auth.userId || auth.role == UserRole.ADMIN) {
       return order
     }
 

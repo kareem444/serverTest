@@ -27,6 +27,9 @@ export class Order {
     @Prop({ required: true, type: mongoose.Schema.Types.Number })
     price: number
 
+    @Prop({ type: mongoose.Schema.Types.Date, required: true })
+    date: Date
+
     @Prop({ default: Date.now, type: mongoose.Schema.Types.Date })
     createdAt: Date
 }

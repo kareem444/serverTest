@@ -3,7 +3,9 @@ import {
     IsOptional,
     IsEnum,
     ValidateNested,
-    IsString
+    IsString,
+    IsDate,
+    IsDateString
 } from 'class-validator';
 import { EnumStatues } from 'src/helpers/enums/enum.values';
 import { Type } from 'class-transformer'
@@ -26,6 +28,11 @@ export class CreateOrderDto {
     @IsNotEmpty()
     @IsString()
     sellerId: String
+
+    @ApiProperty({ type: Date, name: "date", required: true })
+    @IsNotEmpty()
+    @IsDateString()
+    date: Date
 
     price: number
 
